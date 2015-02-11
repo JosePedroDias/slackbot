@@ -116,34 +116,23 @@ var doStep = function() {
 			else if (step === 'logged-in') {
 				updateChannel(page, channelMessages, currentChannel, onNewMessage);
 
-				phrase = randomItemOfArray(phrases);
-				console.log('sending message "' + phrase + '"...');
-				res = sendMessage(page, phrase);
+				if (Math.random() < 0.1) { // send messages in average every 5*0.1=50 seconds.
+					phrase = randomItemOfArray(phrases);
+					console.log('sending message "' + phrase + '"...');
+					res = sendMessage(page, phrase);
+				}
+				else {
+					console.log('I\'ll be quiet this time.');
+				}
 
-				/*window.setTimeout(
-					function() {
-						console.log('about to render');
-						page.render('slackbot.png');
-						console.log('exiting.');
-						phantom.exit();
-					},
-					2 * 1000
-				);*/
-
-				/*window.setTimeout(
-					function() {
-						console.log('exiting.');
-						phantom.exit();
-					},
-					2 * 1000
-				);*/
-
-				setTimeout(doStep, 5 * 1000);
+				setTimeout(doStep, 0);
 			}
 			else {
 				console.log('unsupported step: "' + step + '"!');
+
 				setTimeout(doStep, 0);
 			}
+			
 			console.log('res: ' + res);
 		},
 		zzz * 1000

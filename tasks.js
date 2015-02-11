@@ -65,8 +65,10 @@ var sendMessage = function(page, msg) {
 
 
 var getMessages = function(page, afterId) {
-	return page.evaluate(
+	var res = page.evaluate(
 		function(afterId) {
+			var debug = 'Received ' + afterId + '. ';
+
 			var arr = document.querySelectorAll('.message_content');
 			arr = Array.prototype.slice.call(arr);
 
@@ -81,19 +83,32 @@ var getMessages = function(page, afterId) {
 			});
 
 			// looks for afterId
-			for (var i = arr.length - 1; i >= 0; --i) {
-				if (arr[i].id === afterId) { break; }
+			var found = false;
+			var l = arr.length;
+			for (var i = l - 1; i >= 0; --i) {
+				if (arr[i].id === afterId) {
+					found = true;
+					break;
+				}
 			}
 
 			// if found, remove
-			if (i > 0) {
-				arr.splice(0, i);
+			if (found) {
+				arr = arr.splice(i + 1, l);
+				debug += 'Found ' + l + ' messages. Returning ' + arr.length + ' messages because afterId was found at position #' + i + '. ';
+			}
+			else {
+				debug += 'Found ' + arr.length + ' messages. All returned because afterId was not found. ';
 			}
 
-			return arr;
+			return {newMessages:arr, debug:debug};
 		},
 		afterId
 	);
+
+	// console.log(res.debug);
+
+	return res.newMessages;
 };
 
 

@@ -6,7 +6,9 @@
 
 
 
-**DISCLAIMER** - THIS IS AN EXPERIMENT. USE IF FOR GOOD AND AT YOUR OWN RESPONSABILITY.
+**DISCLAIMER**  
+THIS IS AN EXPERIMENT.  
+USE IF FOR GOOD AND AT YOUR OWN RESPONSABILITY.
 
 
 
@@ -52,3 +54,9 @@ Check the `echoNewMessages` plugin.
 
 * http://phantomjs.org/api/webpage/
 * http://phantomjs.org/api/phantom/
+
+
+
+## TODO
+
+* check [here](TODO.md)
