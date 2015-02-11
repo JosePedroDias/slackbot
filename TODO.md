@@ -1,9 +1,6 @@
 # TODO
 
-* remove timeouts
-* detect page ready
-* find which messages are new
-* for each new message, process
+* remove timeouts -> detect page ready
+* `BUGGY` find which messages are new 
 * iterate through channels periodically
 * respond to direct messages
-* plugin interface
