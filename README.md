@@ -6,6 +6,10 @@
 
 
 
+**DISCLAIMER** - THIS IS AN EXPERIMENT. USE IF FOR GOOD AND AT YOUR OWN RESPONSABILITY.
+
+
+
 ## Setup
 
 Install phantomjs as stated on the site [download](http://phantomjs.org/download.html) [build](http://phantomjs.org/build.html)
