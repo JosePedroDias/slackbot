@@ -14,8 +14,19 @@ console.log('system args:' + args);*/
 
 
 
+var plugins = [];
+config.plugins.forEach(function(pluginName) {
+	console.log('Loading plugin ' + pluginName + '...');
+	phantom.injectJs(pluginName + '.js');
+});
 
-var messages = [];
+
+
+var onNewMessage = function(msg) {
+	plugins.forEach(function(pluginHandler) {
+		pluginHandler(msg);
+	});
+};
 
 
 
@@ -28,6 +39,11 @@ page.webSecurityEnabled = false;
 
 
 phantom.injectJs('tasks.js');
+
+
+
+phantom.injectJs('greetings.js');
+console.log('loaded ' + greetings.length + ' greetings.');
 
 
 
@@ -68,9 +84,8 @@ var sleeps = {
 
 
 var doStep = function() {
-	var currentChannelMessages = channelMessages[currentChannel];
-
 	var zzz = sleeps[step] || 5;
+	var phrase;
 
 	console.log('\nabout to do step ' + step + ' after ' + zzz + ' s...');
 
@@ -88,27 +103,20 @@ var doStep = function() {
 				}
 			}
 			else if (step === 'logging-in') {
-				sendMessage(page, 'hello guys!');
+				updateChannel(page, channelMessages, currentChannel, onNewMessage);
 
-				var afterId = currentChannelMessages ? currentChannelMessages[ currentChannelMessages.length-1 ].id : undefined;
-				messages = getMessages(page, afterId);
-				console.log('fetched ' + messages.length + ' messages.');
-				currentChannelMessages = currentChannelMessages.concat(messages);
-				saveJSON(currentChannel + '.json', currentChannelMessages);
-				console.log('saved ' + currentChannelMessages.length + ' messages.');
+				phrase = randomItemOfArray(greetings);
+				console.log('sending message "' + phrase + '"...');
+				res = sendMessage(page, phrase);
 
 				step = 'logged-in';
 
 				setTimeout(doStep, 0);
 			}
 			else if (step === 'logged-in') {
-				/*messages = getMessages(page, afterId);
-				// console.log('messages:');
-				// console.log( JSON.stringify(messages, null, '  ') );
-				
-				saveJSON(currentChannel + '.json', messages);*/
+				updateChannel(page, channelMessages, currentChannel, onNewMessage);
 
-				var phrase = randomItemOfArray(phrases);
+				phrase = randomItemOfArray(phrases);
 				console.log('sending message "' + phrase + '"...');
 				res = sendMessage(page, phrase);
 
