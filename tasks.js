@@ -132,8 +132,8 @@ var updateChannel = function(page, channelMessages, currentChannel, onNewMessage
 
 	// TODO have max length?
 
-	saveJSON(currentChannel + '.json', currentChannelMessages);
-	console.log('saved ' + currentChannelMessages.length + ' messages.');
+	/*saveJSON(currentChannel + '.json', currentChannelMessages);
+	console.log('saved ' + currentChannelMessages.length + ' messages.');*/
 
 	channelMessages[currentChannel] = currentChannelMessages;
 };

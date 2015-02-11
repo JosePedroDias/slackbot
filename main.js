@@ -17,14 +17,18 @@ console.log('system args:' + args);*/
 var plugins = [];
 config.plugins.forEach(function(pluginName) {
 	console.log('Loading plugin ' + pluginName + '...');
-	phantom.injectJs(pluginName + '.js');
+	phantom.injectJs('plugin-' + pluginName + '.js');
 });
+
+
+
+var publicAPI = {};
 
 
 
 var onNewMessage = function(msg) {
 	plugins.forEach(function(pluginHandler) {
-		pluginHandler(msg);
+		pluginHandler(msg, publicAPI);
 	});
 };
 
@@ -62,8 +66,9 @@ var url = getUrl(config, currentChannel);
 
 
 // load channels history
+
 var channelMessages = {};
-config.channels.forEach(function(channelName) {
+/*config.channels.forEach(function(channelName) {
 	try {
 		var messages = loadJSON(channelName + '.json');
 		channelMessages[channelName] = messages;
@@ -71,7 +76,7 @@ config.channels.forEach(function(channelName) {
 	} catch (ex) {
 		console.log('found no prior messages for channel ' + channelName);
 	}
-});
+});*/
 
 
 
@@ -116,7 +121,7 @@ var doStep = function() {
 			else if (step === 'logged-in') {
 				updateChannel(page, channelMessages, currentChannel, onNewMessage);
 
-				if (Math.random() < 0.1) { // send messages in average every 5*0.1=50 seconds.
+				if (Math.random() < 0) { // send messages in average every 5*0.1=50 seconds.
 					phrase = randomItemOfArray(phrases);
 					console.log('sending message "' + phrase + '"...');
 					res = sendMessage(page, phrase);
@@ -132,7 +137,7 @@ var doStep = function() {
 
 				setTimeout(doStep, 0);
 			}
-			
+
 			console.log('res: ' + res);
 		},
 		zzz * 1000
@@ -142,11 +147,25 @@ var doStep = function() {
 
 
 page.onLoadFinished = function(status) {
-    console.log("\npage loaded: ", status, page.url/*, page.title*/);
+    console.log("\npage loaded: ", status, page.url);
     doStep();
 };
 
 
+
+// add stuff to public API
+
+publicAPI.say = function(o) {
+	sendMessage(page, o.text);
+};
+
+publicAPI.randomInt = randomInt;
+
+publicAPI.randomItemOfArray = randomItemOfArray;
+
+
+
+// effectively start the page here
 
 page.open(url, function(status) {
 	if (status !== 'success') {
@@ -154,3 +173,5 @@ page.open(url, function(status) {
 		phantom.exit(1);
 	}
 });
+
+

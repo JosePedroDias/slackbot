@@ -30,7 +30,7 @@ var config = {
 	email:          'YOUR_EMAIL_HERE',
 	password:       'YOUR_PASSWORD_HERE',
 	channels:       ['general', 'codez'], // array of channels to visit periodically
-	plugins:        ['echoNewMessages'] // plugins to load
+	plugins:        ['echoNewMessages', 'calc'] // plugins to load
 };
 ```
 
