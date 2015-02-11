@@ -1,2 +1,3 @@
 config.js
-messages.json
+cookies.txt
+*.json

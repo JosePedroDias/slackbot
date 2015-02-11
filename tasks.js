@@ -2,8 +2,25 @@ var fs = require('fs');
 
 
 
+var loadJSON = function(fn) {
+	return JSON.parse(fs.read(fn));
+};
+
+
+
 var saveJSON = function(fn, o) {
 	fs.write(fn, JSON.stringify(o), 'w');
+};
+
+
+
+var randomInt = function(n) {
+	return ~~( Math.random() * n);
+};
+
+
+var randomItemOfArray = function(arr) {
+	return arr[ randomInt(arr.length) ];
 };
 
 

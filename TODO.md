@@ -1,3 +1,5 @@
+# TODO
+
 * remove timeouts
 * detect page ready
 * find which messages are new
