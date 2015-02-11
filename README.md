@@ -39,6 +39,14 @@ var config = {
 ## Plugin development
 
 A plugin is a function which gets called each time a new message arrives.
+
+
+The received arguments are:
+
+	{Object} msg
+	{Object} api
+
+
 For now a message has:
 
 	{String} id   - message id
@@ -46,7 +54,19 @@ For now a message has:
 	{String} from - username of the sender
 	{Number} when - timestamp
 
-Check the `echoNewMessages` plugin.
+
+The public API exposed to plugins so far has:
+
+	say({text})
+
+	{Number} randomInt({Number} n)
+
+	{Any} randomItemOfArray({Array}arr)
+
+
+Check the sample plugins.
+
+Keep in mind you can surround the plugins.push() call in an IIFE so you can store state between calls.
 
 
 
