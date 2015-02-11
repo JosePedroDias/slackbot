@@ -26,9 +26,13 @@ page.webSecurityEnabled       = false;
 
 
 
+phantom.injectJs('tasks.js');
+
+
+
 var step = 'login';
 
-var url = getUrl(cfg, cfg.channels[0]);
+var url = getUrl(config, config.channels[0]);
 
 
 
@@ -40,7 +44,7 @@ var doStep = function() {
 		function() {
 			var res;
 			if (step === 'login') {
-				res = login(page, cfg);
+				res = login(page, config);
 				console.log('logging in: ' + (res === 'failed' ? 'not required' : 'ok') );
 
 				step = 'logged-in';

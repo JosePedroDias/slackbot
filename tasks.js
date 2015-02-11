@@ -9,7 +9,7 @@ var saveJSON = function(fn, o) {
 
 
 var getUrl = function(cfg, channelName) {
-	return 'https://' + cfg.slackInstance + '.slack.com/messages/' + cfg.channelName + '/';
+	return 'https://' + cfg.slackInstance + '.slack.com/messages/' + channelName + '/';
 };
 
 
