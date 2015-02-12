@@ -108,18 +108,39 @@ var checkUnreadChannels = function(page) {
 };
 
 var goToChannel = function(page, channelName) {
-	page.evaluate(
+	var res = page.evaluate(
 		function(channelName) {
-			var arr = document.querySelector('#channel-list').querySelectorAll('.channel.unread');
-			arr = Array.prototype.slice.call(arr);
-			arr.forEach(function(el) {
-				if (el.querySelector('.overflow-ellipsis').innerText.substring(2) === channelName) {
-					el.click();
-				}
-			});
+			var output = '';
+			try {
+				var arr = document.querySelector('#channel-list').querySelectorAll('.channel.unread');
+				arr = Array.prototype.slice.call(arr);
+				arr.forEach(function(el) {
+					if (el.querySelector('.overflow-ellipsis').innerText.substring(2) === channelName) {
+						output += ' found';
+						
+						el = el.querySelector('a');
+
+						if (el) {
+							el.click();
+							output += ' clicked';
+						}
+						else {
+							output += ' did not click';
+						}
+					}
+				});
+			} catch (ex) {
+				output += ' failed';
+			}
+			return output;
 		},
 		channelName
 	);
+
+	console.log('res: ' + res);
+
+	// setTimeout(function() { console.log('PAGE TITLE IS "' + page.title + '"'); }, 1000);
+
 	currentChannel = channelName;
 	console.log('went to ' + currentChannel);
 };
@@ -139,18 +160,39 @@ var checkDirectMessages = function(page) {
 };
 
 var goToDirectMessage = function(page, userName) {
-	page.evaluate(
+	var res = page.evaluate(
 		function(userName) {
-			var arr = document.querySelectorAll('.cursor_pointer.member.unread');
-			arr = Array.prototype.slice.call(arr);
-			arr.forEach(function(el) {
-				if (el.querySelector('.overflow-ellipsis').innerText.trim() === userName) {
-					el.click();
-				}
-			});
+			var output = '';
+			try {
+				var arr = document.querySelectorAll('.cursor_pointer.member.unread');
+				arr = Array.prototype.slice.call(arr);
+				arr.forEach(function(el) {
+					if (el.querySelector('.overflow-ellipsis').innerText.trim() === userName) {
+						output += ' found';
+						
+						el = el.querySelector('a');
+						
+						if (el) {
+							el.click();
+							output += ' clicked';
+						}
+						else {
+							output += ' did not click';
+						}
+					}
+				});
+			} catch(ex) {
+				output += ' failed';
+			}
+			return output;
 		},
 		userName
 	);
+
+	console.log('res: ' + res);
+
+	// setTimeout(function() { console.log('PAGE TITLE IS "' + page.title + '"'); }, 1000);
+
 	currentChannel = '@' + userName;
 	console.log('went to ' + currentChannel);
 };
