@@ -35,9 +35,11 @@
 				phrase = api.randomItemOfArray(plugin_smallTalk_phrases);
 				console.log(this.name + ' saying "' + phrase + '"');
 				api.say({ text: phrase });
+				this.lastMessageTime = t;
 			}
-
-			console.log(this.name + ' tick! No activity for ' + silenceTime);
+			else {
+				console.log(this.name + ' tick! No activity for ' + silenceTime);
+			}
 		},
 		tickMs: 1000
 	});

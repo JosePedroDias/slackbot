@@ -80,9 +80,8 @@ var doStep = function() {
 
 	window.setTimeout(
 		function() {
-			var res;
 			if (step === 'not-logged-in') {
-				res = login(page, config);
+				var res = login(page, config);
 				console.log('logging in: ' + (res === 'failed' ? 'not required' : 'ok') );
 
 				step = 'logging-in';
@@ -108,8 +107,6 @@ var doStep = function() {
 
 				setTimeout(doStep, 0);
 			}
-
-			console.log('res: ' + res);
 		},
 		zzz * 1000
 	);
