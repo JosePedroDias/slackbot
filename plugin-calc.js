@@ -5,12 +5,22 @@ plugins.push({
 		
 		var expr = msg.text.substring(5).trim();
 		try {
+			expr = expr
+				.replace(/alert/g,   '')
+				.replace(/confirm/g, '')
+				.replace(/open/g,    '')
+				.replace(/prompt/g,  '')
+				.replace(/process/g, '');
+
 			var result = eval(expr);
 			api.say({
-				text: 'calc says: ' + result// + ' to "' + msg.text + '"'
+				text: 'calc says: ' + result + ' to @' + msg.from
 			});
 		} catch (ex) {
-			console.log('EXCEPTION', ex);
+			//console.log('EXCEPTION', ex);
+			api.say({
+				text: 'calc says: 42 to @' + msg.from
+			});
 		}
 	}
 });

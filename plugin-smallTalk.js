@@ -13,7 +13,7 @@
 
 	plugins.push({
 		onNewMessage: function(msg) {
-			console.log(this.name + ' got "' + msg.text + '" from ' + msg.from);
+			//console.log(this.name + ' got "' + msg.text + '" from ' + msg.from);
 			this.lastMessageTime = api.now();
 		},
 		onTick: function() {
@@ -23,25 +23,30 @@
 				this.startTime       = t;
 				this.lastMessageTime = t;
 
+				// first run - say hi
 				phrase = api.randomItemOfArray(plugin_smallTalk_greetings);
-				console.log(this.name + ' saying "' + phrase + '"');
+				console.log(this.name + ' greeting with "' + phrase + '"');
 				api.say({ text: phrase });
 				return;
 			}
 
+			if (this.keepQuiet) { return; }
+
 			var silenceTime = (t - this.lastMessageTime) / 1000; // in seconds
 
 			if (silenceTime > 30) {
+				//
 				phrase = api.randomItemOfArray(plugin_smallTalk_phrases);
-				console.log(this.name + ' saying "' + phrase + '"');
+				console.log(this.name + ' making small talk with "' + phrase + '"');
 				api.say({ text: phrase });
 				this.lastMessageTime = t;
 			}
 			else {
-				console.log(this.name + ' tick! No activity for ' + silenceTime);
+				// console.log(this.name + ' tick! No activity for ' + silenceTime);
 			}
 		},
-		tickMs: 1000
+		tickMs: 1000,
+		keepQuiet: true
 	});
 
 })();

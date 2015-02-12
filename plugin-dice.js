@@ -9,7 +9,7 @@ plugins.push({
 		if (isNaN(n)) { return; }
 
 		api.say({
-			text: 'dice says: ' + (api.randomInt(n) + 1)// + ' to "' + msg.text + '"'
+			text: 'dice says: ' + (api.randomInt(n) + 1) + ' to @' + msg.from
 		});
 	}
 });
