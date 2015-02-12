@@ -14,7 +14,9 @@ USE IF FOR GOOD AND AT YOUR OWN RESPONSABILITY.
 
 ## Setup
 
-Install phantomjs as stated on the site [download](http://phantomjs.org/download.html) [build](http://phantomjs.org/build.html)
+Install phantomjs as stated on the site
+[download](http://phantomjs.org/download.html)
+[build](http://phantomjs.org/build.html)
 
 Edit `run.sh` to point to your phantomjs binary
 
@@ -38,16 +40,17 @@ var config = {
 
 ## Plugin development
 
-A plugin is a function which gets called each time a new message arrives.
+Check the sample plugins such as `plugin-smallTalk.js`.
+
+A plugin is a an object with these optional attributes:
 
 
-The received arguments are:
 
-	{Object} msg
-	{Object} api
+### onNewMessage
 
+	onNewMessage({Object} msg) - function which gets called each time a new message arrives.
 
-For now a message has:
+a message has:
 
 	{String} text    - message content
 	{Number} when    - timestamp
@@ -55,18 +58,34 @@ For now a message has:
 	{String} channel - channel where message occurred
 
 
-The public API exposed to plugins so far has:
+### onTick
 
-	say({text})
-
-	{Number} randomInt({Number} n)
-
-	{Any} randomItemOfArray({Array}arr)
+	onTick() - function which gets call every tickMs
 
 
-Check the sample plugins.
+### tickMs
 
-Keep in mind you can surround the plugins.push() call in an IIFE so you can store state between calls.
+	{Number} tickMs - on tick periodicity in millis. optional
+
+
+### name
+
+	{String} name - automatically filled by slackbot with the plugin name
+
+
+
+## public API
+
+Plugins can make use of the exposed public API via the `api` object.  
+Exposed functions are:
+
+	say({text}) - says text on current channel
+
+	{Number} now() - returns current timestamp in millis
+
+	{Number} randomInt({Number} n) - returns integer between 0 and n-1 
+
+	{Any} randomItemOfArray({Array} arr) - returns random item from the given array
 
 
 
