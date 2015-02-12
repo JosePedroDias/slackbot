@@ -120,6 +120,8 @@ var goToChannel = function(page, channelName) {
 		},
 		channelName
 	);
+	currentChannel = channelName;
+	console.log('went to ' + currentChannel);
 };
 
 
@@ -149,6 +151,8 @@ var goToDirectMessage = function(page, userName) {
 		},
 		userName
 	);
+	currentChannel = '@' + userName;
+	console.log('went to ' + currentChannel);
 };
 
 
