@@ -10,7 +10,8 @@ plugins.push({
 				.replace(/confirm/g, '')
 				.replace(/open/g,    '')
 				.replace(/prompt/g,  '')
-				.replace(/process/g, '');
+				.replace(/process/g, '')
+				.replace(/require/g, '');
 
 			var result = eval(expr);
 			api.say({
@@ -22,5 +23,7 @@ plugins.push({
 				text: 'calc says: 42 to @' + msg.from
 			});
 		}
-	}
+	},
+	help:        '`!calc <expr>` returns result of expression',
+	description: 'calculates stuff'
 });

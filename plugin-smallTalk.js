@@ -32,21 +32,24 @@
 
 			if (this.keepQuiet) { return; }
 
-			var silenceTime = (t - this.lastMessageTime) / 1000; // in seconds
+			var silenceTimeS = (t - this.lastMessageTime) / 1000; // in seconds
 
-			if (silenceTime > 30) {
-				//
+			if (silenceTimeS > this.makeSmallTalkS) {
+				// quiet for makeSmallTalkS seconds, filling with small talk...
 				phrase = api.randomItemOfArray(plugin_smallTalk_phrases);
 				console.log(this.name + ' making small talk with "' + phrase + '"');
 				api.say({ text: phrase });
 				this.lastMessageTime = t;
 			}
 			else {
-				// console.log(this.name + ' tick! No activity for ' + silenceTime);
+				// console.log(this.name + ' tick! No activity for ' + silenceTimeS);
 			}
 		},
-		tickMs: 1000,
-		keepQuiet: true
+		tickMs:         1000,
+		help:           'greets people when arriving. can also make small talk when channel is quiet for <keepQuiet> seconds',
+		description:    'makes conversation',
+		makeSmallTalkS: 30,
+		keepQuiet:      true
 	});
 
 })();

@@ -67,7 +67,7 @@ try {
 var sleeps = {
 	'not-logged-in':  2,
 	'logging-in':    11,
-	'logged-in':      5
+	'logged-in':      2
 };
 
 

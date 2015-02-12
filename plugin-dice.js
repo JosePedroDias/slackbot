@@ -11,5 +11,7 @@ plugins.push({
 		api.say({
 			text: 'dice says: ' + (api.randomInt(n) + 1) + ' to @' + msg.from
 		});
-	}
+	},
+	help:        '`!dice <n>` returns a number between 1 and n',
+	description: 'rolls a dice for you'
 });
