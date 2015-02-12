@@ -49,10 +49,10 @@ The received arguments are:
 
 For now a message has:
 
-	{String} id   - message id
-	{String} text - message content
-	{String} from - username of the sender
-	{Number} when - timestamp
+	{String} text    - message content
+	{Number} when    - timestamp
+	{String} from    - username of the sender
+	{String} channel - channel where message occurred
 
 
 The public API exposed to plugins so far has:

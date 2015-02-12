@@ -1,4 +1,4 @@
-var greetings = [
+var plugin_smallTalk_greetings = [
 	'hi there!',
 	'hello!',
 	'greetings...',

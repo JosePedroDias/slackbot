@@ -1,6 +1,4 @@
-//var system = require('system');
-
-
+// load configuration
 
 var haveConfig = phantom.injectJs('config.js');
 if (!haveConfig) {
@@ -8,27 +6,33 @@ if (!haveConfig) {
 	phantom.exit(1);
 }
 
-/*var args = system.args.slice();
-args.shift();
-console.log('system args:' + args);*/
 
 
+// some globals
+
+var step = 'not-logged-in';
+var api = {};
+var lastChannelTimestamps = {};
+var url, currentChannel;
+
+
+
+// setup plugins
 
 var plugins = [];
 config.plugins.forEach(function(pluginName) {
 	console.log('Loading plugin ' + pluginName + '...');
 	phantom.injectJs('plugin-' + pluginName + '.js');
+	plugins[ plugins.length - 1 ].name = pluginName;
 });
-
-
-
-var publicAPI = {};
 
 
 
 var onNewMessage = function(msg) {
 	plugins.forEach(function(pluginHandler) {
-		pluginHandler(msg, publicAPI);
+		if ('onNewMessage' in pluginHandler) {
+			pluginHandler.onNewMessage(msg);
+		}
 	});
 };
 
@@ -46,37 +50,17 @@ phantom.injectJs('tasks.js');
 
 
 
-phantom.injectJs('greetings.js');
-console.log('loaded ' + greetings.length + ' greetings.');
-
-
-
-phantom.injectJs('phrases.js');
-console.log('loaded ' + phrases.length + ' phrases.');
-
-
-
-var step = 'not-logged-in';
-
-var currentChannel = config.channels[0];
-
-var url = getUrl(config, currentChannel);
+currentChannel = config.channels[0];
+url = getUrl(config, currentChannel);
 
 
 
 
 // load channels history
 
-var channelMessages = {};
-/*config.channels.forEach(function(channelName) {
-	try {
-		var messages = loadJSON(channelName + '.json');
-		channelMessages[channelName] = messages;
-		console.log('found ' + messages.length + ' messages for channel ' + channelName);
-	} catch (ex) {
-		console.log('found no prior messages for channel ' + channelName);
-	}
-});*/
+try {
+	lastChannelTimestamps = loadJSON('lastChannelTimestamps.json');
+} catch (ex) {}
 
 
 
@@ -108,27 +92,14 @@ var doStep = function() {
 				}
 			}
 			else if (step === 'logging-in') {
-				updateChannel(page, channelMessages, currentChannel, onNewMessage);
-
-				phrase = randomItemOfArray(greetings);
-				console.log('sending message "' + phrase + '"...');
-				res = sendMessage(page, phrase);
+				updateChannel(page, lastChannelTimestamps, currentChannel, onNewMessage);
 
 				step = 'logged-in';
 
 				setTimeout(doStep, 0);
 			}
 			else if (step === 'logged-in') {
-				updateChannel(page, channelMessages, currentChannel, onNewMessage);
-
-				if (Math.random() < 0) { // send messages in average every 5*0.1=50 seconds.
-					phrase = randomItemOfArray(phrases);
-					console.log('sending message "' + phrase + '"...');
-					res = sendMessage(page, phrase);
-				}
-				else {
-					console.log('I\'ll be quiet this time.');
-				}
+				updateChannel(page, lastChannelTimestamps, currentChannel, onNewMessage);
 
 				setTimeout(doStep, 0);
 			}
@@ -155,13 +126,12 @@ page.onLoadFinished = function(status) {
 
 // add stuff to public API
 
-publicAPI.say = function(o) {
+api.say = function(o) {
 	sendMessage(page, o.text);
 };
-
-publicAPI.randomInt = randomInt;
-
-publicAPI.randomItemOfArray = randomItemOfArray;
+api.now = now;
+api.randomInt = randomInt;
+api.randomItemOfArray = randomItemOfArray;
 
 
 
@@ -175,3 +145,18 @@ page.open(url, function(status) {
 });
 
 
+
+
+// setup plugin ticks
+
+plugins.forEach(function(pluginHandler) {
+	if ('tickMs' in pluginHandler && 'onTick' in pluginHandler) {
+		var cb = function() {
+			if (step === 'logged-in') {
+				this.onTick();
+			}
+		}.bind(pluginHandler);
+		console.log('setting up onTick for plugin ' + pluginHandler.name);
+		setInterval(cb, pluginHandler.tickMs);
+	}
+});

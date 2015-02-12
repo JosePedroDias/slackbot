@@ -1,6 +1,6 @@
 // shamelessly ripped from https://raw.githubusercontent.com/jessamynsmith/talkbackbot/master/talkback/quotes.txt
 
-var phrases = [
+var plugin_smallTalk_phrases = [
 	"I've been described as a tough and noisy woman, a prize fighter, a man-hater, you name it. They call me Battling Bella, Mother Courage, and a Jewish mother with more complaints than Portnoy. ~ Bella Abzug",
 	"They used to give us a day--it was called International Women's Day. In 1975 they gave us a year, the Year of the Woman. Then from 1975 to 1985 they gave us a decade, the Decade of the Woman. I said at the time, who knows, if we behave they may let us into the whole thing. Well, we didn't behave and here we are. ~ Bella Abzug",
 	"Women have been trained to speak softly and carry a lipstick. Those days are over. ~ Bella Abzug",
