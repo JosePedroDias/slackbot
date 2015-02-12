@@ -95,14 +95,60 @@ var getMessages = function(page, currentChannelLTS) {
 
 
 
-var checkDirectMessages = function(page) {
+var checkUnreadChannels = function(page) {
+	return page.evaluate(
+		function() {
+			var arr = document.querySelector('#channel-list').querySelectorAll('.channel.unread');
+			arr = Array.prototype.slice.call(arr);
+			return arr.map(function(el) {
+				return el.querySelector('.overflow-ellipsis').innerText.substring(2);
+			});
+		}
+	);
+};
 
+var goToChannel = function(page, channelName) {
+	page.evaluate(
+		function(channelName) {
+			var arr = document.querySelector('#channel-list').querySelectorAll('.channel.unread');
+			arr = Array.prototype.slice.call(arr);
+			arr.forEach(function(el) {
+				if (el.querySelector('.overflow-ellipsis').innerText.substring(2) === channelName) {
+					el.click();
+				}
+			});
+		},
+		channelName
+	);
 };
 
 
 
-var checkUnreadChannels = function(page) {
+var checkDirectMessages = function(page) {
+	return page.evaluate(
+		function() {
+			var arr = document.querySelectorAll('.cursor_pointer.member.unread');
+			arr = Array.prototype.slice.call(arr);
+			return arr.map(function(el) {
+				return el.querySelector('.overflow-ellipsis').innerText.trim();
+			});
+		}
+	);
+};
 
+var goToDirectMessage = function(page, userName) {
+	page.evaluate(
+		function(userName) {
+			var arr = document.querySelectorAll('.cursor_pointer.member.unread');
+			arr = Array.prototype.slice.call(arr);
+			arr.forEach(function(el) {
+				if (el.querySelector('.overflow-ellipsis').innerText.trim() === userName) {
+					el.click();
+				}
+			});
+		},
+		userName
+	);
 };
 
 

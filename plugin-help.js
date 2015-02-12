@@ -1,8 +1,7 @@
 plugins.push({
 	onNewMessage: function(msg) {
-		if (msg.text.substring(0, 5) !== '!help') { return; }
-
-		var expr = msg.text.substring(5).trim();
+		var expr = api.parseCommand(msg.text, 'help');
+		if (expr === undefined) { return; }
 
 		var genericMode = (expr === '');
 

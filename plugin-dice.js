@@ -1,15 +1,17 @@
 plugins.push({
 	onNewMessage: function(msg) {
-		if (msg.text.substring(0, 5) !== '!dice') { return; }
-
-		var expr = msg.text.substring(5).trim();
+		var expr = api.parseCommand(msg.text, 'dice');
+		if (expr === undefined) { return; }
 
 		var n = parseInt(expr, 10);
 
 		if (isNaN(n)) { return; }
 
+		var result = api.randomInt(n) + 1;
+
+		console.log('dice: ' + result);
 		api.say({
-			text: 'dice says: ' + (api.randomInt(n) + 1) + ' to @' + msg.from
+			text: this.name + ' says: ' + result + ' to @' + msg.from
 		});
 	},
 	help:        '`!dice <n>` - returns a number between `1` and `n`',

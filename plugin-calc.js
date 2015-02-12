@@ -1,32 +1,22 @@
 plugins.push({
 	onNewMessage: function(msg) {
 		'use strict';
+		/*jshint evil:true */
 
 		var fs, require, window, console, open, process;
 
-		/*jshint evil:true */
-		if (msg.text.substring(0, 5) !== '!calc') { return; }
-		
-		var expr = msg.text.substring(5).trim();
-		try {
-			/*expr = expr
-				.replace(/alert/g,   '')
-				.replace(/confirm/g, '')
-				.replace(/open/g,    '')
-				.replace(/prompt/g,  '')
-				.replace(/process/g, '')
-				.replace(/require/g, '');*/
+		var expr = api.parseCommand(msg.text, 'calc');
+		if (expr === undefined) { return; }
 
-			var result = eval(expr);
-			api.say({
-				text: 'calc says: ' + result + ' to @' + msg.from
-			});
-		} catch (ex) {
-			//console.log('EXCEPTION', ex);
-			api.say({
-				text: 'calc says: 42 to @' + msg.from
-			});
-		}
+		var result = 42;
+		try {
+			result = eval(expr);
+		} catch (ex) {}
+
+		console.log('calc: ' + result);
+		api.say({
+			text: this.name + ' says: ' + result + ' to @' + msg.from
+		});
 	},
 	help:        '`!calc <expr>` - returns result of expression',
 	description: 'calculates stuff'

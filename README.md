@@ -79,11 +79,28 @@ a message has:
 Plugins can make use of the exposed public API via the `api` object.  
 Exposed functions are:
 
+
+### say
+
 	say({text}) - says text on current channel
+
+
+### now
 
 	{Number} now() - returns current timestamp in millis
 
+
+### parseCommand
+
+	{String|String[]} parseCommand(messageText, commandName, [tokenizer]) - returns command parameters if message starts with !commandName. undefined if not the command. if tokenizer is passed, returns an array.
+
+
+### randomInt
+
 	{Number} randomInt({Number} n) - returns integer between 0 and n-1 
+
+
+### randomItemOfArray
 
 	{Any} randomItemOfArray({Array} arr) - returns random item from the given array
 

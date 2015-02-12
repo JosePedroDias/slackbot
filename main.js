@@ -66,10 +66,6 @@ try {
 	lastChannelTimestamps = loadJSON('lastChannelTimestamps.json');
 } catch (ex) {}
 
-// PATCH
-//lastChannelTimestamps[currentChannel] = now();
-
-
 
 
 var sleeps = {
@@ -108,6 +104,16 @@ var doStep = function() {
 			else if (step === 'logged-in') {
 				updateChannel(page, lastChannelTimestamps, currentChannel, onNewMessage);
 
+				var dms = checkDirectMessages(page);
+				if (dms.length) {
+					console.log('dms: ' + dms.join(','));
+				}
+
+				var ucs = checkUnreadChannels(page);
+				if (ucs.length) {
+					console.log('ucs: ' + ucs.join(','));
+				}
+
 				setTimeout(doStep, 0);
 			}
 			else {
@@ -133,6 +139,26 @@ page.onLoadFinished = function(status) {
 
 api.say = function(o) {
 	sendMessage(page, o.text);
+};
+api.parseCommand = function(str, commandName, tokenizer) {
+	if (str[0] !== '!') { return; }
+	var l = commandName.length;
+	if (str.substring(1, l+1) !== commandName) { return; }
+	var rest = str.substring(l+1).trim();
+	return (tokenizer ? rest.split(tokenizer) : rest);
+};
+api.takeScreenshot = function(screenshotName) {
+	if (!screenshotName) {
+		screenshotName = 'shot_' + now() + '.png';
+	}
+	page.render(screenshotName);
+	return screenshotName;
+};
+api.goToChannel = function(channelName) {
+	goToChannel(page, channelName);
+};
+api.goToDirectMessage = function(userName) {
+	goToDirectMessage(page, userName);
 };
 api.now = now;
 api.randomInt = randomInt;
