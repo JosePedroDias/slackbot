@@ -149,7 +149,7 @@ api.parseCommand = function(str, commandName, tokenizer) {
 };
 api.takeScreenshot = function(screenshotName) {
 	if (!screenshotName) {
-		screenshotName = 'shot_' + now() + '.png';
+		screenshotName = 'shot_' + currentChannel + '_' + now() + '.png';
 	}
 	page.render(screenshotName);
 	return screenshotName;
