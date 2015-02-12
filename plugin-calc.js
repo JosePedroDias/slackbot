@@ -24,6 +24,6 @@ plugins.push({
 			});
 		}
 	},
-	help:        '`!calc <expr>` returns result of expression',
+	help:        '`!calc <expr>` - returns result of expression',
 	description: 'calculates stuff'
 });

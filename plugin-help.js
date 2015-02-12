@@ -10,19 +10,17 @@ plugins.push({
 
 		plugins.forEach(function(pluginHandler) {
 			if (genericMode) {
-				msg2.push( [pluginHandler.name, ' - ', pluginHandler.description || 'no info'].join('') );
+				msg2.push( ['* ', pluginHandler.name, ' - ', pluginHandler.description || 'no info'].join('') );
 			}
 			else if (pluginHandler.name === expr) {
-				msg2.push(pluginHandler.help);
+				msg2 = ['help says: ' + pluginHandler.help];
 			}
 		});
-
-		var n = parseInt(expr, 10);
-
-		if (isNaN(n)) { return; }
 
 		api.say({
 			text: msg2.join('\n')
 		});
-	}
+	},
+	help:        '`!help` - lists loaded plugins\n`!help <plugin_name>` - displays plugin usage info',
+	description: 'me!'
 });

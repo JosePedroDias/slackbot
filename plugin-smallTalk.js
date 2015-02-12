@@ -46,7 +46,7 @@
 			}
 		},
 		tickMs:         1000,
-		help:           'greets people when arriving. can also make small talk when channel is quiet for <keepQuiet> seconds',
+		help:           'greets people when arriving. can also make small talk when channel is quiet for `keepQuiet` seconds',
 		description:    'makes conversation',
 		makeSmallTalkS: 30,
 		keepQuiet:      true
