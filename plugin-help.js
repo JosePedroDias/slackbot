@@ -21,6 +21,6 @@ plugins.push({
 			text: msg2.join('\n')
 		});
 	},
-	help:        '`!help` - lists loaded plugins\n`!help <plugin_name>` - displays plugin usage info',
+	help:        '\n`!help` - lists loaded plugins\n`!help <plugin_name>` - displays plugin usage info',
 	description: 'me!'
 });
