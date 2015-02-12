@@ -112,12 +112,12 @@ var goToChannel = function(page, channelName) {
 		function(channelName) {
 			var output = '';
 			try {
-				var arr = document.querySelector('#channel-list').querySelectorAll('.channel.unread');
+				var arr = document.querySelector('#channel-list').querySelectorAll('.channel');
 				arr = Array.prototype.slice.call(arr);
 				arr.forEach(function(el) {
 					if (el.querySelector('.overflow-ellipsis').innerText.substring(2) === channelName) {
 						output += ' found';
-						
+
 						el = el.querySelector('a');
 
 						if (el) {
@@ -164,7 +164,7 @@ var goToDirectMessage = function(page, userName) {
 		function(userName) {
 			var output = '';
 			try {
-				var arr = document.querySelectorAll('.cursor_pointer.member.unread');
+				var arr = document.querySelectorAll('.cursor_pointer.member');
 				arr = Array.prototype.slice.call(arr);
 				arr.forEach(function(el) {
 					if (el.querySelector('.overflow-ellipsis').innerText.trim() === userName) {
