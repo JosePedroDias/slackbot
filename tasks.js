@@ -95,6 +95,18 @@ var getMessages = function(page, currentChannelLTS) {
 
 
 
+var checkDirectMessages = function(page) {
+
+};
+
+
+
+var checkUnreadChannels = function(page) {
+
+};
+
+
+
 var updateChannel = function(page, lastChannelTimestamps, currentChannel, onNewMessage) {
 	var currentChannelLTS = lastChannelTimestamps[currentChannel] || undefined;
 

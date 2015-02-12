@@ -31,7 +31,11 @@ config.plugins.forEach(function(pluginName) {
 var onNewMessage = function(msg) {
 	plugins.forEach(function(pluginHandler) {
 		if ('onNewMessage' in pluginHandler) {
-			pluginHandler.onNewMessage(msg);
+			try {
+				pluginHandler.onNewMessage(msg);
+			} catch(ex) {
+				console.log(pluginHandler.name + ' onNewMessage() ERROR:\n' + ex);
+			}
 		}
 	});
 };
@@ -61,6 +65,10 @@ url = getUrl(config, currentChannel);
 try {
 	lastChannelTimestamps = loadJSON('lastChannelTimestamps.json');
 } catch (ex) {}
+
+// PATCH
+//lastChannelTimestamps[currentChannel] = now();
+
 
 
 
@@ -150,7 +158,11 @@ plugins.forEach(function(pluginHandler) {
 	if ('tickMs' in pluginHandler && 'onTick' in pluginHandler) {
 		var cb = function() {
 			if (step === 'logged-in') {
-				this.onTick();
+				try {
+					this.onTick();
+				} catch(ex) {
+					console.log(this.name + ' onTick() ERROR:\n' + ex);
+				}
 			}
 		}.bind(pluginHandler);
 		console.log('setting up onTick for plugin ' + pluginHandler.name);
