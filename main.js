@@ -83,7 +83,9 @@ var doStep = function() {
 	var zzz = sleeps[step] || 5;
 	var phrase;
 
-	console.log('\nwill do step ' + step + ' in channel ' + currentChannel + ' after ' + zzz + ' s...');
+	currentChannel = getChannelName(page) || currentChannel;
+
+	console.log(time() + ' will do step ' + step + ' in channel ' + currentChannel + ' after ' + zzz + ' s...');
 
 	window.setTimeout(
 		function() {
@@ -107,7 +109,7 @@ var doStep = function() {
 			else if (step === 'logged-in') {
 				updateChannel(page, lastChannelTimestamps, currentChannel, onNewMessage);
 
-				var dms = checkDirectMessages(page);
+				/*var dms = checkDirectMessages(page);
 				if (dms.length) {
 					console.log('dms: ' + dms.join(','));
 				}
@@ -115,7 +117,7 @@ var doStep = function() {
 				var ucs = checkUnreadChannels(page);
 				if (ucs.length) {
 					console.log('ucs: ' + ucs.join(','));
-				}
+				}*/
 
 				setTimeout(doStep, 0);
 			}

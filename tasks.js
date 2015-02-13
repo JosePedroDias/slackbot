@@ -20,6 +20,32 @@ var now = function() {
 
 
 
+var getChannelName = function(page) {
+	var pt = page.title; 
+
+	if (pt.indexOf('|') === -1) { return; }
+
+	var url = page.frameUrl;
+	//console.log('title: "' + pt + '"; url: "' + url + '"');
+
+	var t = /\*? ?([a-z0-9\-]+)/.exec(pt)[1];
+
+	if (url.indexOf('@') !== -1) {
+		t = '@' + t;
+	}
+	//console.log('"' + t + '"');
+
+	return t;
+};
+
+
+
+var time = function() {
+	return new Date().toISOString().substring(11, 19);
+};
+
+
+
 var randomInt = function(n) {
 	return ~~( Math.random() * n);
 };
@@ -166,11 +192,6 @@ var goToChannel = function(page, channelName) {
 	);
 
 	console.log('res: ' + res);
-
-	// setTimeout(function() { console.log('PAGE TITLE IS "' + page.title + '"'); }, 1000);
-
-	currentChannel = channelName;
-	console.log('went to ' + currentChannel);
 };
 
 
@@ -218,29 +239,29 @@ var goToDirectMessage = function(page, userName) {
 	);
 
 	console.log('res: ' + res);
-
-	// setTimeout(function() { console.log('PAGE TITLE IS "' + page.title + '"'); }, 1000);
-
-	currentChannel = '@' + userName;
-	console.log('went to ' + currentChannel);
 };
 
 
 
 var goToUnread = function() {
 	// TODO NOT WORKING ARGH
+
+	var res = page.evaluate(
+		function() {
+			var inputEl = document.querySelector('#message-input');
+			inputEl.focus();
+		}
+	);
 	
-	//keypress('Down', ['meta']);
+	keypress('Down', ['meta']);
 	//keypress('Down', ['alt']);
-	keypress(['Down', 'Option']);
+	//keypress(['Down', 'Option']);
 
 	//keypress('Up', ['meta', 'shift']);
 	//keypress(['Up', 'Option'], ['shift']);
 	//keypress(['Up', 'Option', 'Shift']);
 	//keypress(['Up', 'Alt'], ['shift']);
 	//keypress(['Up', 'Alt', 'Shift']);
-
-	console.log('TITLE: ' + page.title);
 };
 
 
