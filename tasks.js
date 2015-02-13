@@ -105,7 +105,7 @@ var keypress = function(keyOrKeys, modifiers) {
 var click = function(rect) { // el.getBoundingClientRect
 	var x = ~~(rect.left + rect.width /2);
 	var y = ~~(rect.top  + rect.height/2);
-	console.log('click! (' + x + ', ' + y + ')');
+	// console.log('click! (' + x + ', ' + y + ')');
 	page.sendEvent('click', x, y, 'left');
 };
 

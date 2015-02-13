@@ -95,7 +95,9 @@ var doStep = function() {
 
 	currentChannel = getChannelName(page) || currentChannel;
 
-	console.log(time() + ' will do step ' + step + ' in channel ' + currentChannel + ' after ' + zzz + ' s...');
+	if (step !== 'logged-in') {
+		console.log(time() + ' will do step ' + step + ' in channel ' + currentChannel + ' after ' + zzz + ' s...');
+	}
 
 	window.setTimeout(
 		function() {
@@ -126,14 +128,14 @@ var doStep = function() {
 					if (ucs.length) {
 						// console.log('ucs: ' + ucs.join(','));
 						inactiveSteps = 0;
-						api.goToChannel( ucs.shift() );
+						goToChannel(page, ucs.shift());
 					}
 					else {
 						var dms = checkDirectMessages(page);
 						if (dms.length) {
 							// console.log('dms: ' + dms.join(','));
 							inactiveSteps = 0;
-							api.goToDirectMessage( dms.shift() );
+							goToDirectMessage(page, dms.shift());
 						}
 					}
 				}
