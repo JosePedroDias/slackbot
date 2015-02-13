@@ -109,6 +109,10 @@ Exposed functions are:
 	{Any} randomItemOfArray({Array} arr) - returns random item from the given array
 
 
+### takeScreenshot
+
+	{String} takeScreenShot([{String} filename]) - saves browser image (useful for debugging). If filename is ommitted, it is automatically generated. returns filename.
+
 
 ## Reference
 

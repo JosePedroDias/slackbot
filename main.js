@@ -182,12 +182,6 @@ api.takeScreenshot = function(screenshotName) {
 	page.render(screenshotName);
 	return screenshotName;
 };
-api.goToChannel = function(channelName) {
-	goToChannel(page, channelName);
-};
-api.goToDirectMessage = function(userName) {
-	goToDirectMessage(page, userName);
-};
 api.now = now;
 api.randomInt = randomInt;
 api.randomItemOfArray = randomItemOfArray;

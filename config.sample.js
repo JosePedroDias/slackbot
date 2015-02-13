@@ -14,11 +14,9 @@ var config = {
 	],
 	plugins: [
 		 'echoNewMessages'
-		,'mute'
+		//,'mute'
 		,'help'
-		,'goto'
-		,'gotounread'
-		,'shot'
+		//,'shot'
 		,'dice'
 		,'say'
 		,'calc'
