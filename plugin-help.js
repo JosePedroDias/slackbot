@@ -19,6 +19,8 @@ plugins.push({
 		api.say({
 			text: msg2.join('\n')
 		});
+
+		return true;
 	},
 	help:        '\n`!help` - lists loaded plugins\n`!help <plugin_name>` - displays plugin usage info',
 	description: 'me!'

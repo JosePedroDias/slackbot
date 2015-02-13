@@ -15,6 +15,8 @@ plugins.push({
 		}
 
 		console.log(this.name + ' saying "' + rest + '"');
+
+		return true;
 	},
 	help:        '`!goto` <user or channel>` - moves bot to user/channel tab',
 	description: 'moves bot to given user or channel'

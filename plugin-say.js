@@ -5,6 +5,8 @@ plugins.push({
 		
 		console.log(this.name + ' saying "' + rest + '"');
 		api.say({text:rest});
+
+		return true;
 	},
 	help:        '`!say` <stuff>` - says given text',
 	description: 'says what you request it to'

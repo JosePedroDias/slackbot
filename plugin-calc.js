@@ -17,6 +17,8 @@ plugins.push({
 		api.say({
 			text: this.name + ' says: ' + result + ' to @' + msg.from
 		});
+
+		return true;
 	},
 	help:        '`!calc <expr>` - returns result of expression',
 	description: 'calculates stuff'

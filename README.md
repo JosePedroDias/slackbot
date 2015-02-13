@@ -50,6 +50,9 @@ A plugin is a an object with these optional attributes:
 
 	onNewMessage({Object} msg) - function which gets called each time a new message arrives.
 
+**NOTE**:  
+If this function returns true, the following plugins in the `plugins` config array won't be notified.
+
 a message has:
 
 	{String} text    - message content

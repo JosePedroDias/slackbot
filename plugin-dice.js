@@ -13,6 +13,8 @@ plugins.push({
 		api.say({
 			text: this.name + ' says: ' + result + ' to @' + msg.from
 		});
+
+		return true;
 	},
 	help:        '`!dice <n>` - returns a number between `1` and `n`',
 	description: 'rolls a dice for you'

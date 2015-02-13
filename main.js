@@ -29,10 +29,12 @@ config.plugins.forEach(function(pluginName) {
 
 
 var onNewMessage = function(msg) {
-	plugins.forEach(function(pluginHandler) {
+	plugins.some(function(pluginHandler) {
 		if ('onNewMessage' in pluginHandler) {
 			try {
-				pluginHandler.onNewMessage(msg);
+				var val = pluginHandler.onNewMessage(msg);
+				//console.log('plugin ' + pluginHandler.name + ' ' + (val === true ? 'EXHAUSTED' : 'LET IT PASS'));
+				return val;
 			} catch(ex) {
 				console.log(pluginHandler.name + ' onNewMessage() ERROR:\n' + ex);
 			}

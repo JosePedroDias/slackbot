@@ -5,6 +5,8 @@ plugins.push({
 		
 		var shotFile = api.takeScreenshot(rest);
 		console.log('saved screenshot: ' + shotFile);
+
+		return true;
 	},
 	help:        '\n`!shot` - takes screenshot named shot_<timestamp>.png\n!`shot filename.png` - takes screenshot `filename.png`',
 	description: 'saves bot browser\'s screenshot'
