@@ -24,7 +24,7 @@ plugins.push({
 
 		return true;
 	},
-	help:        '\n`!unmute` lets remaining plugins work\n`!mute` inhibits remaining plugins\n`!ismuted` display current mute state',
+	help:        '\n`!unmute` - lets remaining plugins work\n`!mute` - inhibits remaining plugins\n`!ismuted` - displays current mute state',
 	description: 'when activated, no plugins below it receive onNewMessage calls',
 
 	isMuted: true

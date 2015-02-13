@@ -42,14 +42,14 @@
 				this.lastMessageTime = t;
 			}
 			else {
-				// console.log(this.name + ' tick! No activity for ' + silenceTimeS);
+				console.log(this.name + ' tick! No activity for ' + silenceTimeS);
 			}
 		},
 		tickMs:         1000,
 		help:           '\ngreets people when arriving.\ncan also make small talk when channel is quiet for `keepQuiet` seconds.',
 		description:    'makes conversation',
-		makeSmallTalkS: 30,
-		keepQuiet:      true
+		makeSmallTalkS: 60,
+		keepQuiet:      false
 	});
 
 })();

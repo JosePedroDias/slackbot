@@ -165,34 +165,31 @@ var checkUnreadChannels = function(page) {
 var goToChannel = function(page, channelName) {
 	var res = page.evaluate(
 		function(channelName) {
-			var output = '';
+			var out;
 			try {
 				var arr = document.querySelector('#channel-list').querySelectorAll('.channel');
 				arr = Array.prototype.slice.call(arr);
-				arr.forEach(function(el) {
+				arr.some(function(el) {
 					if (el.querySelector('.overflow-ellipsis').innerText.substring(2) === channelName) {
-						output += ' found';
-
 						el = el.querySelector('a');
-
 						if (el) {
-							el.click();
-							output += ' clicked';
-						}
-						else {
-							output += ' did not click';
+							out = el.getBoundingClientRect();
+							return true;
 						}
 					}
 				});
-			} catch (ex) {
-				output += ' failed';
-			}
-			return output;
+			} catch (ex) {}
+			return out;
 		},
 		channelName
 	);
 
-	console.log('res: ' + res);
+	var x = res.left + ~~(res.width /2);
+	var y = res.top  + ~~(res.height/2);
+
+	console.log('(' + x + ', ' + y + ')');
+
+	page.sendEvent('click', x, y, 'left');
 };
 
 
@@ -223,7 +220,11 @@ var goToDirectMessage = function(page, userName) {
 						el = el.querySelector('a');
 						
 						if (el) {
-							el.click();
+							//el.click();
+
+							el.mousedown();
+							el.mouseup();
+
 							output += ' clicked';
 						}
 						else {
@@ -244,25 +245,30 @@ var goToDirectMessage = function(page, userName) {
 
 
 
-var goToUnread = function() {
-	// TODO NOT WORKING ARGH
-
+var goToUnread = function() { // TODO NOT WORKING
 	var res = page.evaluate(
 		function() {
 			var inputEl = document.querySelector('#message-input');
 			inputEl.focus();
 		}
 	);
-	
-	keypress('Down', ['meta']);
-	//keypress('Down', ['alt']);
-	//keypress(['Down', 'Option']);
 
-	//keypress('Up', ['meta', 'shift']);
-	//keypress(['Up', 'Option'], ['shift']);
-	//keypress(['Up', 'Option', 'Shift']);
-	//keypress(['Up', 'Alt'], ['shift']);
-	//keypress(['Up', 'Alt', 'Shift']);
+	page.sendEvent('keydown', page.event.key.Down, null, null, 0);
+	page.sendEvent('keydown', page.event.key.Down, null, null, page.event.modifier.alt);
+	page.sendEvent('keydown', page.event.key.Down, null, null, page.event.modifier.alt | page.event.modifier.shift);
+	page.sendEvent('keyup',   page.event.key.Down, null, null, page.event.modifier.alt | page.event.modifier.shift);
+	page.sendEvent('keyup',   page.event.key.Down, null, null, page.event.modifier.alt);
+	page.sendEvent('keyup',   page.event.key.Down, null, null, 0);
+
+	// keypress('Down', ['alt', 'shift']);
+	// keypress(['Down', 'Alt'], ['shift']);
+};
+
+
+
+var markChannelRead = function() {
+	console.log('** markChannelRead! **');
+	api.takeScreenshot();
 };
 
 

@@ -87,6 +87,7 @@ var sleeps = {
 };
 
 
+var inactiveSteps = 0;
 
 var doStep = function() {
 	var zzz = sleeps[step] || 5;
@@ -118,15 +119,28 @@ var doStep = function() {
 			else if (step === 'logged-in') {
 				updateChannel(page, lastChannelTimestamps, currentChannel, onNewMessage);
 
-				/*var dms = checkDirectMessages(page);
-				if (dms.length) {
-					console.log('dms: ' + dms.join(','));
-				}
+				++inactiveSteps;
 
-				var ucs = checkUnreadChannels(page);
-				if (ucs.length) {
-					console.log('ucs: ' + ucs.join(','));
-				}*/
+				if (inactiveSteps > 5) {
+					var ucs = checkUnreadChannels(page);
+					if (ucs.length) {
+						console.log('ucs: ' + ucs.join(','));
+						inactiveSteps = 0;
+						// api.markChannelRead();
+						api.goToChannel( ucs.shift() );
+						// api.goToUnread();
+					}
+					/*else {
+						var dms = checkDirectMessages(page);
+						if (dms.length) {
+							console.log('dms: ' + dms.join(','));
+							inactiveSteps = 0;
+							// api.markChannelRead();
+							api.goToDirectMessage( dms.shift() );
+							// api.goToUnread();
+						}
+					}*/
+				}
 
 				setTimeout(doStep, 0);
 			}
@@ -178,6 +192,9 @@ api.goToDirectMessage = function(userName) {
 };
 api.goToUnread = function() {
 	goToUnread();
+};
+api.markChannelRead = function() {
+	markChannelRead();
 };
 api.now = now;
 api.randomInt = randomInt;
