@@ -80,10 +80,6 @@ var onNewMessage = function(msg) {
 
 
 
-
-
-
-
 var sleeps = {
 	'not-logged-in':  2,
 	'logging-in':    11,
@@ -146,6 +142,8 @@ var doStep = function() {
 
 
 
+// fired when a page loads (should happen only once for now...)
+
 page.onLoadFinished = function(status) {
     console.log('page loaded: ', status, page.url);
     doStep();
@@ -198,7 +196,7 @@ page.open(getUrl(config, currentChannel), function(status) {
 
 
 
-// setup plugin ticks
+// setup plugin onTick timers
 
 plugins.forEach(function(pluginHandler) {
 	if ('tickMs' in pluginHandler && 'onTick' in pluginHandler) {
@@ -211,7 +209,7 @@ plugins.forEach(function(pluginHandler) {
 				}
 			}
 		}.bind(pluginHandler);
-		console.log('setting up onTick for plugin ' + pluginHandler.name);
+		console.log('setting up onTick() for plugin ' + pluginHandler.name);
 		setInterval(cb, pluginHandler.tickMs);
 	}
 });
