@@ -24,7 +24,7 @@ Edit `run.sh` to point to your phantomjs binary
 
 ## Config
 
-Create a `config.js` file like this one:
+Create a `config.js` file like this one (or you can rename `config.sample.js` and replace the fields):
 
 ```javascript
 var config = {
