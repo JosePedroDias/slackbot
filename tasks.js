@@ -102,6 +102,15 @@ var keypress = function(keyOrKeys, modifiers) {
 
 
 
+var click = function(rect) { // el.getBoundingClientRect
+	var x = ~~(rect.left + rect.width /2);
+	var y = ~~(rect.top  + rect.height/2);
+	console.log('click! (' + x + ', ' + y + ')');
+	page.sendEvent('click', x, y, 'left');
+};
+
+
+
 var sendMessage = function(page, msg) {
 	var res = page.evaluate(
 		function(msg) {
@@ -163,6 +172,7 @@ var checkUnreadChannels = function(page) {
 };
 
 var goToChannel = function(page, channelName) {
+	console.log('~~> ' + channelName + '...');
 	var res = page.evaluate(
 		function(channelName) {
 			var out;
@@ -178,18 +188,13 @@ var goToChannel = function(page, channelName) {
 						}
 					}
 				});
+				return out;
 			} catch (ex) {}
-			return out;
 		},
 		channelName
 	);
 
-	var x = res.left + ~~(res.width /2);
-	var y = res.top  + ~~(res.height/2);
-
-	console.log('(' + x + ', ' + y + ')');
-
-	page.sendEvent('click', x, y, 'left');
+	if (res) { click(res); }
 };
 
 
@@ -207,68 +212,29 @@ var checkDirectMessages = function(page) {
 };
 
 var goToDirectMessage = function(page, userName) {
+	console.log('~~> @' + userName + '...');
 	var res = page.evaluate(
 		function(userName) {
-			var output = '';
+			var out;
 			try {
 				var arr = document.querySelectorAll('.cursor_pointer.member');
 				arr = Array.prototype.slice.call(arr);
-				arr.forEach(function(el) {
+				arr.some(function(el) {
 					if (el.querySelector('.overflow-ellipsis').innerText.trim() === userName) {
-						output += ' found';
-						
 						el = el.querySelector('a');
-						
 						if (el) {
-							//el.click();
-
-							el.mousedown();
-							el.mouseup();
-
-							output += ' clicked';
-						}
-						else {
-							output += ' did not click';
+							out = el.getBoundingClientRect();
+							return true;
 						}
 					}
 				});
-			} catch(ex) {
-				output += ' failed';
-			}
-			return output;
+			} catch(ex) {}
+			return out;
 		},
 		userName
 	);
 
-	console.log('res: ' + res);
-};
-
-
-
-var goToUnread = function() { // TODO NOT WORKING
-	var res = page.evaluate(
-		function() {
-			var inputEl = document.querySelector('#message-input');
-			inputEl.focus();
-		}
-	);
-
-	page.sendEvent('keydown', page.event.key.Down, null, null, 0);
-	page.sendEvent('keydown', page.event.key.Down, null, null, page.event.modifier.alt);
-	page.sendEvent('keydown', page.event.key.Down, null, null, page.event.modifier.alt | page.event.modifier.shift);
-	page.sendEvent('keyup',   page.event.key.Down, null, null, page.event.modifier.alt | page.event.modifier.shift);
-	page.sendEvent('keyup',   page.event.key.Down, null, null, page.event.modifier.alt);
-	page.sendEvent('keyup',   page.event.key.Down, null, null, 0);
-
-	// keypress('Down', ['alt', 'shift']);
-	// keypress(['Down', 'Alt'], ['shift']);
-};
-
-
-
-var markChannelRead = function() {
-	console.log('** markChannelRead! **');
-	api.takeScreenshot();
+	if (res) { click(res); }
 };
 
 
