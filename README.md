@@ -28,11 +28,12 @@ Create a `config.js` file like this one:
 
 ```javascript
 var config = {
-	slackInstance:  'YOUR_TEAMS_SLACK_INSTANCE_HERE',
+	slackInstance:  'YOUR_TEAMS_SLACK_INSTANCE_HERE', // just the vhost, not the whole domain
+	username:       'YOUR_USERNAME', // without @
 	email:          'YOUR_EMAIL_HERE',
 	password:       'YOUR_PASSWORD_HERE',
 	channels:       ['general', 'codez'], // array of channels to visit periodically
-	plugins:        ['echoNewMessages', 'calc'] // plugins to load
+	plugins:        ['echoNewMessages', 'calc'] // plugins to load. order is relevant
 };
 ```
 
