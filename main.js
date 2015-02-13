@@ -11,15 +11,49 @@ if (!haveConfig) {
 // some globals
 
 var step = 'not-logged-in';
-var api = {};
+var currentChannel = config.channels[0];
 var lastChannelTimestamps = {};
-var url, currentChannel;
+var plugins = [];
+var api = {};
+
+
+
+// setup browser window
+
+var page = require('webpage').create();
+page.viewportSize = {width:800, height:600};
+page.settings.userAgent = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36';
+// page.settings.resourceTimeout = 30000;
+// page.settings.loadImages = false;
+page.webSecurityEnabled = false;
+
+
+
+// load low-level bot functions
+
+phantom.injectJs('tasks.js');
+
+
+
+// load channel times
+
+try {
+	lastChannelTimestamps = loadJSON('lastChannelTimestamps.json');
+} catch (ex) {}
+
+if (false) { // resets history
+	console.log('resetting channel visit times...');
+	var n = parseFloat( (new Date().valueOf() / 1000).toFixed(6) );
+	config.channels.forEach(function(channelName) {
+		lastChannelTimestamps[channelName] = n;
+	});
+	saveJSON('lastChannelTimestamps.json', lastChannelTimestamps, true);
+}
 
 
 
 // setup plugins
 
-var plugins = [];
 config.plugins.forEach(function(pluginName) {
 	console.log('Loading plugin ' + pluginName + '...');
 	phantom.injectJs('plugin-' + pluginName + '.js');
@@ -27,6 +61,8 @@ config.plugins.forEach(function(pluginName) {
 });
 
 
+
+// onNewMessage generic callback
 
 var onNewMessage = function(msg) {
 	plugins.some(function(pluginHandler) {
@@ -44,30 +80,7 @@ var onNewMessage = function(msg) {
 
 
 
-var page = require('webpage').create();
-page.viewportSize = {width:800, height:600};
-page.settings.userAgent = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36';
-// page.settings.resourceTimeout = 30000;
-// page.settings.loadImages = false;
-page.webSecurityEnabled = false;
 
-
-
-phantom.injectJs('tasks.js');
-
-
-
-currentChannel = config.channels[0];
-url = getUrl(config, currentChannel);
-
-
-
-
-// load channels history
-
-try {
-	lastChannelTimestamps = loadJSON('lastChannelTimestamps.json');
-} catch (ex) {}
 
 
 
@@ -134,7 +147,7 @@ var doStep = function() {
 
 
 page.onLoadFinished = function(status) {
-    console.log("\npage loaded: ", status, page.url);
+    console.log('page loaded: ', status, page.url);
     doStep();
 };
 
@@ -176,13 +189,12 @@ api.randomItemOfArray = randomItemOfArray;
 
 // effectively start the page here
 
-page.open(url, function(status) {
+page.open(getUrl(config, currentChannel), function(status) {
 	if (status !== 'success') {
 		console.log('Unable to load the address!');
 		phantom.exit(1);
 	}
 });
-
 
 
 

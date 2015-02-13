@@ -8,8 +8,9 @@ var loadJSON = function(fn) {
 
 
 
-var saveJSON = function(fn, o) {
-	fs.write(fn, JSON.stringify(o), 'w');
+var saveJSON = function(fn, o, pretty) {
+	var s = JSON.stringify(o, null, pretty ? '  ' : undefined);
+	fs.write(fn, s, 'w');
 };
 
 
@@ -287,6 +288,6 @@ var updateChannel = function(page, lastChannelTimestamps, currentChannel, onNewM
 		lastChannelTimestamps[currentChannel] = currentChannelLTS;
 
 		//console.log('saving ts ' + currentChannelLTS + ' for channel ' + currentChannel);
-		saveJSON('lastChannelTimestamps.json', lastChannelTimestamps);
+		saveJSON('lastChannelTimestamps.json', lastChannelTimestamps, true);
 	}
 };
