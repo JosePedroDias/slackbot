@@ -121,17 +121,17 @@ var doStep = function() {
 
 				++inactiveSteps;
 
-				if (inactiveSteps > 5) {
+				if (inactiveSteps > 3) {
 					var ucs = checkUnreadChannels(page);
 					if (ucs.length) {
-						console.log('ucs: ' + ucs.join(','));
+						// console.log('ucs: ' + ucs.join(','));
 						inactiveSteps = 0;
 						api.goToChannel( ucs.shift() );
 					}
 					else {
 						var dms = checkDirectMessages(page);
 						if (dms.length) {
-							console.log('dms: ' + dms.join(','));
+							// console.log('dms: ' + dms.join(','));
 							inactiveSteps = 0;
 							api.goToDirectMessage( dms.shift() );
 						}
