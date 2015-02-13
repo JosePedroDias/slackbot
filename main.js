@@ -45,6 +45,7 @@ var onNewMessage = function(msg) {
 
 
 var page = require('webpage').create();
+page.viewportSize = {width:800, height:600};
 page.settings.userAgent = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36';
 // page.settings.resourceTimeout = 30000;
 // page.settings.loadImages = false;
@@ -82,7 +83,7 @@ var doStep = function() {
 	var zzz = sleeps[step] || 5;
 	var phrase;
 
-	console.log('\nabout to do step ' + step + ' after ' + zzz + ' s...');
+	console.log('\nwill do step ' + step + ' in channel ' + currentChannel + ' after ' + zzz + ' s...');
 
 	window.setTimeout(
 		function() {
@@ -161,6 +162,9 @@ api.goToChannel = function(channelName) {
 };
 api.goToDirectMessage = function(userName) {
 	goToDirectMessage(page, userName);
+};
+api.goToUnread = function() {
+	goToUnread();
 };
 api.now = now;
 api.randomInt = randomInt;

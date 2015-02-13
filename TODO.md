@@ -1,9 +1,8 @@
 # TODO
 
-* !goto not working well with PMs
+* !goto - requires pressing the more button, otherwise only a subset of channels and users is available
 * iterate through channels and dms on unread
 * throttle says
 * remove timeouts -> detect page ready
-* respond to direct messages
 * overall robustness improvement O:)
 * identify edited messages?

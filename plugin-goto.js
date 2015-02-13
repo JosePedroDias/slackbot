@@ -2,11 +2,13 @@ plugins.push({
 	onNewMessage: function(msg) {
 		var rest = api.parseCommand(msg.text, 'goto');
 		if (rest === undefined) { return; }
+
+		//api.say({text:this.name + ': going to ' + rest + '...'});
 		
 		if (rest[0] === '@') {
 			// user
 			console.log(this.name + ' going to direct message tab with ' + rest);
-			api.goToDirectMessage( rest.substring(0) );
+			api.goToDirectMessage( rest.substring(1) );
 		}
 		else {
 			// channel
@@ -14,7 +16,7 @@ plugins.push({
 			api.goToChannel( rest );
 		}
 
-		console.log(this.name + ' saying "' + rest + '"');
+		//console.log(this.name + ' saying "' + rest + '"');
 
 		return true;
 	},

@@ -3,7 +3,7 @@ plugins.push({
 		'use strict';
 		/*jshint evil:true */
 
-		var fs, require, window, console, open, process;
+		var fs, require, window, open, process;
 
 		var expr = api.parseCommand(msg.text, 'calc');
 		if (expr === undefined) { return; }

@@ -51,6 +51,30 @@ var login = function(page, cfg) {
 
 
 
+var keypress = function(keyOrKeys, modifiers) {
+	var i, key = 0;
+	if (typeof keyOrKeys === 'string') {
+		key = page.event.key[ keyOrKeys ];
+	}
+	else {
+		for (i = keyOrKeys.length - 1; i >= 0; --i) {
+			mod |= page.event.key[ keyOrKeys[i] ];
+		}
+	}
+
+	var mod = 0;
+	if (modifiers) {
+		for (i = modifiers.length - 1; i >= 0; --i) {
+			mod |= page.event.modifier[ modifiers[i] ];
+		}
+	}
+
+	page.sendEvent('keydown', key, null, null, mod);
+	page.sendEvent('keyup',   key, null, null, mod);
+};
+
+
+
 var sendMessage = function(page, msg) {
 	var res = page.evaluate(
 		function(msg) {
@@ -62,8 +86,7 @@ var sendMessage = function(page, msg) {
 		msg
 	);
 
-	page.sendEvent('keyup',   page.event.key.Enter, null, null, 0);
-	page.sendEvent('keydown', page.event.key.Enter, null, null, 0);
+	keypress('Enter');
 
 	return res;
 };
@@ -200,6 +223,24 @@ var goToDirectMessage = function(page, userName) {
 
 	currentChannel = '@' + userName;
 	console.log('went to ' + currentChannel);
+};
+
+
+
+var goToUnread = function() {
+	// TODO NOT WORKING ARGH
+	
+	//keypress('Down', ['meta']);
+	//keypress('Down', ['alt']);
+	keypress(['Down', 'Option']);
+
+	//keypress('Up', ['meta', 'shift']);
+	//keypress(['Up', 'Option'], ['shift']);
+	//keypress(['Up', 'Option', 'Shift']);
+	//keypress(['Up', 'Alt'], ['shift']);
+	//keypress(['Up', 'Alt', 'Shift']);
+
+	console.log('TITLE: ' + page.title);
 };
 
 
