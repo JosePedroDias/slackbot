@@ -1,4 +1,11 @@
-plugins.push({
+'use strict';
+
+var api;
+
+module.exports = {
+	init: function(api_) {
+		api = api_;
+	},
 	onNewMessage: function(msg) {
 		var expr = api.parseCommand(msg.text, 'help');
 		if (expr === undefined) { return; }
@@ -24,4 +31,4 @@ plugins.push({
 	},
 	help:        '\n`!help` - lists loaded plugins\n`!help <plugin_name>` - displays plugin usage info',
 	description: 'me!'
-});
+};

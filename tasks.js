@@ -1,3 +1,7 @@
+'use strict';
+
+
+
 var fs = require('fs');
 
 
@@ -262,4 +266,27 @@ var updateChannel = function(page, lastChannelTimestamps, currentChannel, onNewM
 		//console.log('saving ts ' + currentChannelLTS + ' for channel ' + currentChannel);
 		saveJSON('lastChannelTimestamps.json', lastChannelTimestamps, true);
 	}
+};
+
+
+
+module.exports = {
+	loadJSON: loadJSON,
+	saveJSON: saveJSON,
+	now: now,
+	getChannelName: getChannelName,
+	time: time,
+	randomInt: randomInt,
+	randomItemOfArray: randomItemOfArray,
+	getUrl: getUrl,
+	login: login,
+	keypress: keypress,
+	click: click,
+	sendMessage: sendMessage,
+	getMessages: getMessages,
+	checkUnreadChannels: checkUnreadChannels,
+	goToChannel: goToChannel,
+	checkDirectMessages: checkDirectMessages,
+	goToDirectMessage: goToDirectMessage,
+	updateChannel: updateChannel
 };

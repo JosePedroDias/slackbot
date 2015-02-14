@@ -1,4 +1,11 @@
-plugins.push({
+'use strict';
+
+var api;
+
+module.exports = {
+	init: function(api_) {
+		api = api_;
+	},
 	onNewMessage: function(msg) {
 		var rest = api.parseCommand(msg.text, 'shot');
 		if (rest === undefined) { return; }
@@ -10,4 +17,4 @@ plugins.push({
 	},
 	help:        '\n`!shot` - takes screenshot named shot_<timestamp>.png\n!`shot filename.png` - takes screenshot `filename.png`',
 	description: 'saves bot browser\'s screenshot'
-});
+};

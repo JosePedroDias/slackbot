@@ -1,10 +1,10 @@
+'use strict';
+
+
+
 // load configuration
 
-var haveConfig = phantom.injectJs('config.js');
-if (!haveConfig) {
-	console.log('create a file named config.js, setting the config object');
-	phantom.exit(1);
-}
+var config = require('./config');
 
 
 
@@ -31,7 +31,7 @@ page.webSecurityEnabled = false;
 
 // load low-level bot functions
 
-phantom.injectJs('tasks.js');
+var t = require('./tasks');
 
 
 
@@ -56,8 +56,9 @@ if (false) { // resets history
 
 config.plugins.forEach(function(pluginName) {
 	console.log('Loading plugin ' + pluginName + '...');
-	phantom.injectJs('plugin-' + pluginName + '.js');
-	plugins[ plugins.length - 1 ].name = pluginName;
+	var pluginHandler = require('./plugin-' + pluginName);
+	pluginHandler.name = pluginName;
+	plugins.push(pluginHandler);
 });
 
 
@@ -93,16 +94,16 @@ var doStep = function() {
 	var zzz = sleeps[step] || 5;
 	var phrase;
 
-	currentChannel = getChannelName(page) || currentChannel;
+	currentChannel = t.getChannelName(page) || currentChannel;
 
-	if (step !== 'logged-in') {
-		console.log(time() + ' will do step ' + step + ' in channel ' + currentChannel + ' after ' + zzz + ' s...');
-	}
+	//if (step !== 'logged-in') {
+		console.log(t.time() + ' will do step ' + step + ' in channel ' + currentChannel + ' after ' + zzz + ' s...');
+	//}
 
 	window.setTimeout(
 		function() {
 			if (step === 'not-logged-in') {
-				var res = login(page, config);
+				var res = t.login(page, config);
 				console.log('logging in: ' + (res === 'failed' ? 'not required' : 'ok') );
 
 				step = 'logging-in';
@@ -112,30 +113,30 @@ var doStep = function() {
 				}
 			}
 			else if (step === 'logging-in') {
-				updateChannel(page, lastChannelTimestamps, currentChannel, onNewMessage);
+				t.updateChannel(page, lastChannelTimestamps, currentChannel, onNewMessage);
 
 				step = 'logged-in';
 
 				setTimeout(doStep, 0);
 			}
 			else if (step === 'logged-in') {
-				updateChannel(page, lastChannelTimestamps, currentChannel, onNewMessage);
+				t.updateChannel(page, lastChannelTimestamps, currentChannel, onNewMessage);
 
 				++inactiveSteps;
 
 				if (inactiveSteps > 3) {
-					var ucs = checkUnreadChannels(page);
+					var ucs = t.checkUnreadChannels(page);
 					if (ucs.length) {
 						// console.log('ucs: ' + ucs.join(','));
 						inactiveSteps = 0;
-						goToChannel(page, ucs.shift());
+						t.goToChannel(page, ucs.shift());
 					}
 					else {
-						var dms = checkDirectMessages(page);
+						var dms = t.checkDirectMessages(page);
 						if (dms.length) {
 							// console.log('dms: ' + dms.join(','));
 							inactiveSteps = 0;
-							goToDirectMessage(page, dms.shift());
+							t.goToDirectMessage(page, dms.shift());
 						}
 					}
 				}
@@ -166,7 +167,7 @@ page.onLoadFinished = function(status) {
 // add stuff to public API
 
 api.say = function(o) {
-	sendMessage(page, o.text);
+	t.sendMessage(page, o.text);
 };
 api.parseCommand = function(str, commandName, tokenizer) {
 	if (str[0] !== '!') { return; }
@@ -182,15 +183,15 @@ api.takeScreenshot = function(screenshotName) {
 	page.render(screenshotName);
 	return screenshotName;
 };
-api.now = now;
-api.randomInt = randomInt;
-api.randomItemOfArray = randomItemOfArray;
+api.now = t.now;
+api.randomInt = t.randomInt;
+api.randomItemOfArray = t.randomItemOfArray;
 
 
 
 // effectively start the page here
 
-page.open(getUrl(config, currentChannel), function(status) {
+page.open(t.getUrl(config, currentChannel), function(status) {
 	if (status !== 'success') {
 		console.log('Unable to load the address!');
 		phantom.exit(1);
@@ -199,9 +200,10 @@ page.open(getUrl(config, currentChannel), function(status) {
 
 
 
-// setup plugin onTick timers
+// setup plugin init and onTick timers
 
 plugins.forEach(function(pluginHandler) {
+	pluginHandler.init(api);
 	if ('tickMs' in pluginHandler && 'onTick' in pluginHandler) {
 		var cb = function() {
 			if (step === 'logged-in') {

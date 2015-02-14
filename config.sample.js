@@ -1,5 +1,5 @@
 /*jshint laxcomma:true*/
-var config = {
+module.exports =  {
 	slackInstance: 'SLACK_INSTANCE', // just the vhost, not the whole domain
 	username:      'USERNAME', // without @
 	email:         'EMAIL',

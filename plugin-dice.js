@@ -1,4 +1,11 @@
-plugins.push({
+'use strict';
+
+var api;
+
+module.exports = {
+	init: function(api_) {
+		api = api_;
+	},
 	onNewMessage: function(msg) {
 		var expr = api.parseCommand(msg.text, 'dice');
 		if (expr === undefined) { return; }
@@ -18,4 +25,4 @@ plugins.push({
 	},
 	help:        '`!dice <n>` - returns a number between `1` and `n`',
 	description: 'rolls a dice for you'
-});
+};

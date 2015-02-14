@@ -1,4 +1,11 @@
-plugins.push({
+'use strict';
+
+var api;
+
+module.exports = {
+	init: function(api_) {
+		api = api_;
+	},
 	onNewMessage: function(msg) {
 		//console.log('\n->\n' + JSON.stringify(msg, null, '  '));
 		console.log([
@@ -8,4 +15,4 @@ plugins.push({
 	},
 	help:        'this plugin doesn\' respond to commands',
 	description: 'prints incoming messages to console.log'
-});
+};

@@ -27,7 +27,7 @@ Edit `run.sh` to point to your phantomjs binary
 Create a `config.js` file like this one (or you can rename `config.sample.js` and replace the fields):
 
 ```javascript
-var config = {
+module.exports = {
 	slackInstance:  'YOUR_TEAMS_SLACK_INSTANCE_HERE', // just the vhost, not the whole domain
 	username:       'YOUR_USERNAME', // without @
 	email:          'YOUR_EMAIL_HERE',

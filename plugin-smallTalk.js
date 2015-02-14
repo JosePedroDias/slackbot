@@ -1,55 +1,53 @@
-(function() {
+'use strict';
 
-	'use strict';
+var greetings = require('./plugin-smallTalk-greetings');
+console.log('loaded ' + greetings.length + ' greetings.');
 
+var phrases = require('./plugin-smallTalk-phrases');
+console.log('loaded ' + phrases.length + ' phrases.');
 
+var api;
 
-	phantom.injectJs('plugin-smallTalk-greetings.js');
-	console.log('loaded ' + plugin_smallTalk_greetings.length + ' greetings.');
-	phantom.injectJs('plugin-smallTalk-phrases.js');
-	console.log('loaded ' + plugin_smallTalk_phrases.length + ' phrases.');
+module.exports = {
+	init: function(api_) {
+		api = api_;
+	},
+	onNewMessage: function(msg) {
+		//console.log(this.name + ' got "' + msg.text + '" from ' + msg.from);
+		this.lastMessageTime = api.now();
+	},
+	onTick: function() {
+		var phrase, t = api.now();
 
+		if (!this.startTime) {
+			this.startTime       = t;
+			this.lastMessageTime = t;
 
+			// first run - say hi
+			phrase = api.randomItemOfArray(plugin_smallTalk_greetings);
+			console.log(this.name + ' greeting with "' + phrase + '"');
+			api.say({ text: phrase });
+			return;
+		}
 
-	plugins.push({
-		onNewMessage: function(msg) {
-			//console.log(this.name + ' got "' + msg.text + '" from ' + msg.from);
-			this.lastMessageTime = api.now();
-		},
-		onTick: function() {
-			var phrase, t = api.now();
+		if (this.keepQuiet) { return; }
 
-			if (!this.startTime) {
-				this.startTime       = t;
-				this.lastMessageTime = t;
+		var silenceTimeS = (t - this.lastMessageTime) / 1000; // in seconds
 
-				// first run - say hi
-				phrase = api.randomItemOfArray(plugin_smallTalk_greetings);
-				console.log(this.name + ' greeting with "' + phrase + '"');
-				api.say({ text: phrase });
-				return;
-			}
-
-			if (this.keepQuiet) { return; }
-
-			var silenceTimeS = (t - this.lastMessageTime) / 1000; // in seconds
-
-			if (silenceTimeS > this.makeSmallTalkS) {
-				// quiet for makeSmallTalkS seconds, filling with small talk...
-				phrase = api.randomItemOfArray(plugin_smallTalk_phrases);
-				console.log(this.name + ' making small talk with "' + phrase + '"');
-				api.say({ text: phrase });
-				this.lastMessageTime = t;
-			}
-			/*else {
-				console.log(this.name + ' tick! No activity for ' + silenceTimeS);
-			}*/
-		},
-		tickMs:         1000,
-		help:           '\ngreets people when arriving.\ncan also make small talk when channel is quiet for `keepQuiet` seconds.',
-		description:    'makes conversation',
-		makeSmallTalkS: 60,
-		keepQuiet:      true
-	});
-
-})();
+		if (silenceTimeS > this.makeSmallTalkS) {
+			// quiet for makeSmallTalkS seconds, filling with small talk...
+			phrase = api.randomItemOfArray(plugin_smallTalk_phrases);
+			console.log(this.name + ' making small talk with "' + phrase + '"');
+			api.say({ text: phrase });
+			this.lastMessageTime = t;
+		}
+		/*else {
+			console.log(this.name + ' tick! No activity for ' + silenceTimeS);
+		}*/
+	},
+	tickMs:         1000,
+	help:           '\ngreets people when arriving.\ncan also make small talk when channel is quiet for `keepQuiet` seconds.',
+	description:    'makes conversation',
+	makeSmallTalkS: 60,
+	keepQuiet:      true
+};

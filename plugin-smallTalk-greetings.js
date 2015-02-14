@@ -1,4 +1,4 @@
-var plugin_smallTalk_greetings = [
+module.exports = [
 	'hi there!',
 	'hello!',
 	'greetings...',

@@ -1,4 +1,11 @@
-plugins.push({
+'use strict';
+
+var api;
+
+module.exports = {
+	init: function(api_) {
+		api = api_;
+	},
 	onNewMessage: function(msg) {
 		'use strict';
 		/*jshint evil:true */
@@ -22,4 +29,4 @@ plugins.push({
 	},
 	help:        '`!calc <expr>` - returns result of expression',
 	description: 'calculates stuff'
-});
+};

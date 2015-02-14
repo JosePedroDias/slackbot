@@ -1,4 +1,11 @@
-plugins.push({
+'use strict';
+
+var api;
+
+module.exports = {
+	init: function(api_) {
+		api = api_;
+	},
 	onNewMessage: function(msg) {
 		var out;
 		switch (msg.text) {
@@ -28,4 +35,4 @@ plugins.push({
 	description: 'when activated, no plugins below it receive onNewMessage calls',
 
 	isMuted: true
-});
+};
