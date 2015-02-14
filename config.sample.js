@@ -4,14 +4,7 @@ module.exports =  {
 	username:      'USERNAME', // without @
 	email:         'EMAIL',
 	password:      'PASSWORD',
-	channels: [
-		 'jenkins'
-		,'codez'
-		,'general'
-		,'mtg'
-		,'music'
-		,'nsfw'
-	],
+	startChannel:  'general', // can be a user too
 	plugins: [
 		 'echoNewMessages'
 		//,'mute'

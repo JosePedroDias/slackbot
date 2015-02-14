@@ -32,7 +32,7 @@ module.exports = {
 	username:       'YOUR_USERNAME', // without @
 	email:          'YOUR_EMAIL_HERE',
 	password:       'YOUR_PASSWORD_HERE',
-	channels:       ['general', 'codez'], // array of channels to visit periodically
+	startChannel:   'general',  // can be a user too
 	plugins:        ['echoNewMessages', 'calc'] // plugins to load. order is relevant
 };
 ```
@@ -107,6 +107,11 @@ Exposed functions are:
 ### randomItemOfArray
 
 	{Any} randomItemOfArray({Array} arr) - returns random item from the given array
+
+
+### getCurrentChannel
+
+	{String} getCurrentChannel - returns channel the bot is on. DMs are prefixed with @
 
 
 ### takeScreenshot

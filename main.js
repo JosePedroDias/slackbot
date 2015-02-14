@@ -11,7 +11,7 @@ var config = require('./config');
 // some globals
 
 var step = 'not-logged-in';
-var currentChannel = config.channels[0];
+var currentChannel = config.startChannel;
 var lastChannelTimestamps = {};
 var plugins = [];
 var api = {};
@@ -40,15 +40,6 @@ var t = require('./tasks');
 try {
 	lastChannelTimestamps = loadJSON('lastChannelTimestamps.json');
 } catch (ex) {}
-
-if (false) { // resets history
-	console.log('resetting channel visit times...');
-	var n = parseFloat( (new Date().valueOf() / 1000).toFixed(6) );
-	config.channels.forEach(function(channelName) {
-		lastChannelTimestamps[channelName] = n;
-	});
-	saveJSON('lastChannelTimestamps.json', lastChannelTimestamps, true);
-}
 
 
 
@@ -113,7 +104,7 @@ var doStep = function() {
 				}
 			}
 			else if (step === 'logging-in') {
-				t.updateChannel(page, lastChannelTimestamps, currentChannel, onNewMessage);
+				//t.updateChannel(page, lastChannelTimestamps, currentChannel, onNewMessage);
 
 				step = 'logged-in';
 
@@ -127,14 +118,12 @@ var doStep = function() {
 				if (inactiveSteps > 3) {
 					var ucs = t.checkUnreadChannels(page);
 					if (ucs.length) {
-						// console.log('ucs: ' + ucs.join(','));
 						inactiveSteps = 0;
 						t.goToChannel(page, ucs.shift());
 					}
 					else {
 						var dms = t.checkDirectMessages(page);
 						if (dms.length) {
-							// console.log('dms: ' + dms.join(','));
 							inactiveSteps = 0;
 							t.goToDirectMessage(page, dms.shift());
 						}
@@ -169,6 +158,9 @@ page.onLoadFinished = function(status) {
 api.say = function(o) {
 	t.sendMessage(page, o.text);
 };
+api.getCurrentChannel = function() {
+	return currentChannel;
+},
 api.parseCommand = function(str, commandName, tokenizer) {
 	if (str[0] !== '!') { return; }
 	var l = commandName.length;

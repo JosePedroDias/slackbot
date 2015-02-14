@@ -18,7 +18,7 @@ module.exports = {
 
 		console.log('dice: ' + result);
 		api.say({
-			text: this.name + ' says: ' + result + ' to @' + msg.from
+			text: this.name + ' says: ' + result + ( (api.getCurrentChannel() ===  msg.from) ? '' : ' to ' + msg.from )
 		});
 
 		return true;

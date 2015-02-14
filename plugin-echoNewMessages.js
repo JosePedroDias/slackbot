@@ -9,7 +9,7 @@ module.exports = {
 	onNewMessage: function(msg) {
 		//console.log('\n->\n' + JSON.stringify(msg, null, '  '));
 		console.log([
-			'-> ', msg.from, ' @ ', msg.channel, '\n',
+			'-> ', msg.from, ' said on ', msg.channel, '\n',
 			msg.text
 		].join(''));
 	},

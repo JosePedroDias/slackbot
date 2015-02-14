@@ -145,7 +145,7 @@ var getMessages = function(page, username, currentChannelLTS) {
 				when = parseFloat( el.parentNode.getAttribute('data-ts') );
 				if (when === currentChannelLTS) { break; }
 
-				from = el.parentNode.querySelector('[target]').getAttribute('href').split('/').pop();
+				from = '@' + el.parentNode.querySelector('[target]').getAttribute('href').split('/').pop();
 				if (from === username) { continue; }
 
 				arr2.unshift({
@@ -243,13 +243,15 @@ var goToDirectMessage = function(page, userName) {
 
 
 
-var updateChannel = function(page, lastChannelTimestamps, currentChannel, onNewMessage) {
+var updateChannel = function(page, lastChannelTimestamps, currentChannel, onNewMessage, debug) {
 	var currentChannelLTS = lastChannelTimestamps[currentChannel] || undefined;
 
 	var messages = getMessages(page, config.username, currentChannelLTS);
 
 	if (messages.length) {
-		console.log('fetched new ' + messages.length + ' messages from channel ' + currentChannel + '.');
+		if (debug) {
+			console.log(time() + ' Fetched new ' + messages.length + ' messages from channel ' + currentChannel + '.');	
+		}
 
 		messages.forEach(function(msg) { // enrich messages with channel field
 			msg.channel = currentChannel;
