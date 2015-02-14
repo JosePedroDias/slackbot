@@ -24,7 +24,7 @@ module.exports = {
 			this.lastMessageTime = t;
 
 			// first run - say hi
-			phrase = api.randomItemOfArray(plugin_smallTalk_greetings);
+			phrase = api.randomItemOfArray(greetings);
 			console.log(this.name + ' greeting with "' + phrase + '"');
 			api.say({ text: phrase });
 			return;
@@ -36,7 +36,7 @@ module.exports = {
 
 		if (silenceTimeS > this.makeSmallTalkS) {
 			// quiet for makeSmallTalkS seconds, filling with small talk...
-			phrase = api.randomItemOfArray(plugin_smallTalk_phrases);
+			phrase = api.randomItemOfArray(phrases);
 			console.log(this.name + ' making small talk with "' + phrase + '"');
 			api.say({ text: phrase });
 			this.lastMessageTime = t;

@@ -96,9 +96,9 @@ var doStep = function() {
 
 	currentChannel = t.getChannelName(page) || currentChannel;
 
-	//if (step !== 'logged-in') {
+	if (step !== 'logged-in') {
 		console.log(t.time() + ' will do step ' + step + ' in channel ' + currentChannel + ' after ' + zzz + ' s...');
-	//}
+	}
 
 	window.setTimeout(
 		function() {
