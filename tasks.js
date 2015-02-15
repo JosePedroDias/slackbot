@@ -109,7 +109,7 @@ var keypress = function(keyOrKeys, modifiers) {
 var click = function(rect) { // el.getBoundingClientRect
 	var x = ~~(rect.left + rect.width /2);
 	var y = ~~(rect.top  + rect.height/2);
-	// console.log('click! (' + x + ', ' + y + ')');
+	console.log('click! (' + x + ', ' + y + ')');
 	page.sendEvent('click', x, y, 'left');
 };
 
@@ -209,14 +209,14 @@ var checkDirectMessages = function(page) {
 			var arr = document.querySelectorAll('.cursor_pointer.member.unread');
 			arr = Array.prototype.slice.call(arr);
 			return arr.map(function(el) {
-				return el.querySelector('.overflow-ellipsis').innerText.trim();
+				return '@' + el.querySelector('.overflow-ellipsis').innerText.trim();
 			});
 		}
 	);
 };
 
 var goToDirectMessage = function(page, userName) {
-	console.log('~~> @' + userName + '...');
+	console.log('~~> ' + userName + '...');
 	var res = page.evaluate(
 		function(userName) {
 			var out;
@@ -224,7 +224,7 @@ var goToDirectMessage = function(page, userName) {
 				var arr = document.querySelectorAll('.cursor_pointer.member');
 				arr = Array.prototype.slice.call(arr);
 				arr.some(function(el) {
-					if (el.querySelector('.overflow-ellipsis').innerText.trim() === userName) {
+					if ('@' + el.querySelector('.overflow-ellipsis').innerText.trim() === userName) {
 						el = el.querySelector('a');
 						if (el) {
 							out = el.getBoundingClientRect();
@@ -272,6 +272,27 @@ var updateChannel = function(page, lastChannelTimestamps, currentChannel, onNewM
 
 
 
+var clearUnread = function() {
+	// TODO NOT YET WORKING
+	
+	//keypress('Escape');
+
+	var res = page.evaluate(
+		function() {
+			var el = document.querySelector('.clear_unread_messages');
+			if (el) {
+				return el.getBoundingClientRect();
+			}
+		}
+	);
+
+	if (res) {
+		click(res);
+	}
+};
+
+
+
 module.exports = {
 	loadJSON: loadJSON,
 	saveJSON: saveJSON,
@@ -290,5 +311,6 @@ module.exports = {
 	goToChannel: goToChannel,
 	checkDirectMessages: checkDirectMessages,
 	goToDirectMessage: goToDirectMessage,
-	updateChannel: updateChannel
+	updateChannel: updateChannel,
+	clearUnread: clearUnread
 };

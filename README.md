@@ -86,7 +86,7 @@ Exposed functions are:
 
 ### say
 
-	say({text}) - says text on current channel
+	say({text, [channel]}) - says text on given or current channel
 
 
 ### now

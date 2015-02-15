@@ -2,6 +2,10 @@
 
 
 
+var fs = require('fs');
+
+
+
 // load configuration
 
 var config = require('./config');
@@ -15,6 +19,7 @@ var currentChannel = config.startChannel;
 var lastChannelTimestamps = {};
 var plugins = [];
 var api = {};
+var sayQueues = {}; // indexed by channelName
 
 
 
@@ -104,31 +109,55 @@ var doStep = function() {
 				}
 			}
 			else if (step === 'logging-in') {
-				//t.updateChannel(page, lastChannelTimestamps, currentChannel, onNewMessage);
-
 				step = 'logged-in';
 
 				setTimeout(doStep, 0);
 			}
 			else if (step === 'logged-in') {
+				if (inactiveSteps === 0) {
+					t.clearUnread();
+				}
+				
 				t.updateChannel(page, lastChannelTimestamps, currentChannel, onNewMessage);
 
-				++inactiveSteps;
+				var says = sayQueues[currentChannel];
+				if (says) {
+					says = says.map(function(o) {
+						return o.text;
+					}).join('\n');
+					t.sendMessage(page, says);
+					delete sayQueues[currentChannel];
+				}
 
 				if (inactiveSteps > 3) {
-					var ucs = t.checkUnreadChannels(page);
-					if (ucs.length) {
+					var sqs = Object.keys(sayQueues); // criteria 1 - messages to say somewhere else
+					if (sqs.length > 0) {
+						var destination = sqs.shift();
 						inactiveSteps = 0;
-						t.goToChannel(page, ucs.shift());
-					}
-					else {
-						var dms = t.checkDirectMessages(page);
-						if (dms.length) {
-							inactiveSteps = 0;
-							t.goToDirectMessage(page, dms.shift());
+						if (destination[0] === '@') {
+							t.goToDirectMessage(page, destination);
+						}
+						else {
+							t.goToChannel(page, destination);
 						}
 					}
+					else {
+						var ucs = t.checkUnreadChannels(page); // criteria 2 - messages to read on other channels
+						if (ucs.length > 0) {
+							inactiveSteps = 0;
+							t.goToChannel(page, ucs.shift());
+						}
+						else {
+							var dms = t.checkDirectMessages(page); // criteria 3 - direct messages to read
+							if (dms.length > 0) {
+								inactiveSteps = 0;
+								t.goToDirectMessage(page, dms.shift());
+							}
+						}	
+					}
 				}
+
+				++inactiveSteps;
 
 				setTimeout(doStep, 0);
 			}
@@ -156,7 +185,15 @@ page.onLoadFinished = function(status) {
 // add stuff to public API
 
 api.say = function(o) {
-	t.sendMessage(page, o.text);
+	var ch = o.channel || currentChannel;
+
+	if (!(ch in sayQueues)) {
+		sayQueues[ch] = [o];
+	}
+	else {
+		sayQueues[ch].push(o);
+	}
+	//t.sendMessage(page, o.text);
 };
 api.getCurrentChannel = function() {
 	return currentChannel;
@@ -170,10 +207,18 @@ api.parseCommand = function(str, commandName, tokenizer) {
 };
 api.takeScreenshot = function(screenshotName) {
 	if (!screenshotName) {
-		screenshotName = 'shot_' + currentChannel + '_' + now() + '.png';
+		screenshotName = 'shot_' + currentChannel + '_' + t.now() + '.png';
 	}
 	page.render(screenshotName);
 	return screenshotName;
+};
+api.saveHTML = function(htmlName) {
+	if (!htmlName) {
+		htmlName = 'html_' + currentChannel + '_' + t.now() + '.html';
+	}
+	var html = page.content;
+	fs.write(htmlName, html, 'w');
+	return htmlName;
 };
 api.now = t.now;
 api.randomInt = t.randomInt;

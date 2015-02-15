@@ -18,7 +18,9 @@ module.exports = {
 		var result = 42;
 		try {
 			result = eval(expr);
-		} catch (ex) {}
+		} catch (ex) {
+			result = ex.toString();
+		}
 
 		console.log('calc: ' + result);
 		api.say({
